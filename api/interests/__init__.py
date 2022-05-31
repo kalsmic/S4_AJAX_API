@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, request, abort, jsonify
 from model import db, Interest
+from sqlalchemy.exc import SQLAlchemyError
 
 interests_blueprint = Blueprint('interests_blueprint', __name__)
 

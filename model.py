@@ -60,7 +60,7 @@ class Student(db.Model, FyyurSession):
                                 backref="students")
 
     def format(self) -> dict:
-        return {'id': self.id, 'name': self.name}
+        return {'id': self.id, 'name': self.name, 'interests': [interest.format() for interest in self.interests]}
 
     def __repr__(self) -> str:
         return f'{self.id} - {self.name}'
