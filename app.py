@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for
 from flask_migrate import Migrate
 from model import db, migrate, config
 from api.interests import interests_blueprint
@@ -22,4 +22,13 @@ app.register_blueprint(students_blueprint)
 
 @app.route('/', methods=['POST'])
 def index():
-    return 'index.html'
+    students = Student.query.order_by(
+        Student.id.desc()).limit(limit).offset(offset).all()
+    students_f = [student.format() for student in students]
+    interests = Interest.query.order_by(
+        Interest.id.desc()).limit(limit).offset(offset).all()
+    interests_f = [interest.format() for interest in interests]
+    return render_template(
+        'lists.html',
+        students=students_f,
+        interests=interests_f)
