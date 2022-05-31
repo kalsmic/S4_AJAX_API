@@ -3,6 +3,7 @@ from model import db, Student
 
 students_blueprint = Blueprint('students_blueprint', __name__)
 
+
 @students_blueprint.route('/students', methods=['GET'])
 def view_students(limit=5, offset=0):
     students = Student.query.order_by(
@@ -13,6 +14,7 @@ def view_students(limit=5, offset=0):
         'students': students_f,
         'num_students': len(students_f)
     })
+
 
 @students_blueprint.route('/students', methods=['POST'])
 def create_student():
@@ -39,9 +41,9 @@ def create_student():
                 student.close()
             if success:
                 return jsonify({
-                    'success':True,
-                    'students':[student.format()],
-                    'num_students':1
+                    'success': True,
+                    'students': [student.format()],
+                    'num_students': 1
                 })
             else:
                 abort(500)
