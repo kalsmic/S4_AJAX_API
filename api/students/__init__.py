@@ -40,7 +40,7 @@ def create_student():
             if success:
                 return jsonify({
                     'success':True,
-                    'students':[student.format()]
+                    'students':[student.format()],
                     'num_students':1
                 })
             else:

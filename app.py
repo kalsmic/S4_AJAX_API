@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 from model import db, migrate, config
 from api.interests import interests_blueprint
 from api.students import students_blueprint

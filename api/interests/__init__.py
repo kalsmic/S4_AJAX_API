@@ -1,4 +1,4 @@
-from flask import Blueprint, abort
+from flask import Flask, Blueprint, request,abort, jsonify
 from model import db, Interest
 
 interests_blueprint = Blueprint('interests_blueprint', __name__)
@@ -8,12 +8,17 @@ def view_interests(limit=5, offset=0):
     interests = Interest.query.order_by(
         Interest.id.desc()).limit(limit).offset(offset).all()
     interests_f = [interest.format() for interest in interests]
-    return render_template('pages/interests/list.html', interests=interests_f)
+    return jsonify({
+        'success':True,
+        'interests':interests_f,
+        'num_interests':len(interests_f)
+    })
 
 @interests_blueprint.route('/interests', methods=['POST'])
 def create_interest():
-    if len(request.form) > 0:
-        name = request.form.get('name', None)
+    data = request.get_json()
+    if len(data) > 0:
+        name = data.get('name', None)
         if name is not None:
             interest = Interest(name=name)
             success = False
@@ -27,7 +32,11 @@ def create_interest():
             finally:
                 interest.close()
                 if success:
-                    return redirect(url_for('view_interests'))
+                    return jsonify({
+                        'success':True,
+                        'interests':[interest.format()],
+                        'num_interests':1
+                    })
                 else:
                     abort(500)
         else:
