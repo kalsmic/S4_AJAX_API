@@ -16,6 +16,22 @@ def view_interests(limit=5, offset=0):
     })
 
 
+@interests_blueprint.route('/interests/<int:interest_id>', methods=['GET'])
+def get_interest(interest_id):
+    interest = Interest.query.filter(
+        Interest.id == interest_id).one_or_none()
+    if interest is not None:
+        interest_f = [interest.format()]
+        return jsonify({
+            'success': True,
+            'modified': interest_id,
+            'interests': interest_f,
+            'num_interests': 1
+        })
+    else:
+        abort(500)
+
+
 @interests_blueprint.route('/interests', methods=['POST'])
 def create_interest():
     data = request.get_json()
@@ -36,6 +52,7 @@ def create_interest():
                 if success:
                     return jsonify({
                         'success': True,
+                        'created': interest.id,
                         'interests': [interest.format()],
                         'num_interests': 1
                     })
@@ -49,24 +66,34 @@ def create_interest():
 
 @interests_blueprint.route('/interests/<int:interest_id>', methods=['PATCH'])
 def update_interest(interest_id):
-    if len(request.form) > 0:
-        name = request.form.get('name', None)
+    data = request.get_json()
+    if len(data) > 0:
+        name = data.get('name', None)
         if name is not None:
             interest = Interest.query.filter(
                 Interest.id == interest_id).one_or_none()
-            success = False
-            try:
-                interest.name = name
-                interest.commit()
-                success = True
-            except SQLAlchemyError:
-                interest.rollback()
-            finally:
-                interest.close()
-                if success:
-                    return redirect(url_for('view_interests'))
-                else:
-                    abort(500)
+            if interest is not None:
+                success = False
+                try:
+                    interest.name = name
+                    interest.commit()
+                    success = True
+                except SQLAlchemyError:
+                    interest.rollback()
+                finally:
+                    interest_f = [interest.format()]
+                    interest.close()
+                    if success:
+                        return jsonify({
+                            'success': True,
+                            'modified': interest_id,
+                            'interests': interest_f,
+                            'num_interests': 1
+                        })
+                    else:
+                        abort(500)
+            else:
+                abort(400)
         else:
             abort(500)
     else:
@@ -75,9 +102,9 @@ def update_interest(interest_id):
 
 @interests_blueprint.route('/interests/<int:interest_id>', methods=['DELETE'])
 def delete_interest(interest_id):
-    if len(request.form) > 0:
-        interest = Interest.query.filter(
-            Interest.id == interest_id).one_or_none()
+    interest = Interest.query.filter(
+        Interest.id == interest_id).one_or_none()
+    if interest is not None:
         success = False
         try:
             interest.delete()
@@ -88,7 +115,10 @@ def delete_interest(interest_id):
         finally:
             interest.close()
         if success:
-            return redirect(url_for('view_interests'))
+            return jsonify({
+                'success': True,
+                'deleted': interest_id
+            })
         else:
             abort(500)
     else:
