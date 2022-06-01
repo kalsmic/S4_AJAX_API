@@ -1,0 +1,28 @@
+{% extends 'layout.html' %} {%block content %}
+<h3>Create interest</h3>
+
+<form>
+  <div class="input-group">
+    <div class="input-group-text" id="lb_name">Name</div>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Enter Name"
+    />
+    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+<br />
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Last 5 interests</h3>
+    <ol class="list-group list-group-flush list-group-numbered">
+      {% for interest in interests %}
+      <li class="list-group-item">{{ interest.name }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+
+{% endblock %}

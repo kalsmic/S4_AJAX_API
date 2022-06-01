@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_migrate import Migrate
-from model import db, migrate, config
+from model import db, migrate, config, Student, Interest
 from api.interests import interests_blueprint
 from api.students import students_blueprint
 
@@ -20,8 +20,10 @@ app.register_blueprint(interests_blueprint)
 app.register_blueprint(students_blueprint)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET'])
 def index():
+    limit = request.args.get('limit', 5)
+    offset = request.args.get('offset', 0)
     students = Student.query.order_by(
         Student.id.desc()).limit(limit).offset(offset).all()
     students_f = [student.format() for student in students]
