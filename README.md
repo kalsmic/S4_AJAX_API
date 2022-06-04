@@ -25,3 +25,4 @@ curl -X PATCH -H 'Content-Type:application/json' -d '{"name":"Bawo"}' http://127
 ```bash
 curl -X DELETE http://127.0.0.1:5000/interests/3
 ```
+#TODO: Add how to run the project
