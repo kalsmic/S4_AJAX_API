@@ -1,0 +1,9 @@
+SET DB_NAME=students_api
+SET DB_USER=postgres
+SET DB_PASSWD=reveal12
+SET DB_HOST=localhost
+SET DB_PORT=5432
+SET FLASK_APP=app
+SET FLASK_DEBUG=True
+SET FLASK_ENV=development
+SET APP_KEY=CH5MhX6ny6cY224DefY
