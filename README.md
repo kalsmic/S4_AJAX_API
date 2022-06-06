@@ -63,5 +63,6 @@ curl -X DELETE http://127.0.0.1:5000/interests/3
 - Set env variables
   - Change the values in env.sh (Linux / macOs) or env.bat (Windows)
   - Run the env script on the terminal `env.bat` or `env.sh`
+- Apply migrations to database `flask db upgrade`
 - Run the project
   - `python -m app.py` or `flask run`
