@@ -2,3 +2,4 @@ venv
 __pychache__
 *cpython*
 env
+.idea

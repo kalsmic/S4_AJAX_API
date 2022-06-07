@@ -1,15 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, request
 from flask_migrate import Migrate
-from model import db, migrate, config, Student, Interest
+
 from api.interests import interests_blueprint
 from api.students import students_blueprint
+from model import db, Student, Interest
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = config["SQLALCHEMY_DATABASE_URI"]
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config["SQLALCHEMY_TRACK_MODIFICATIONS"]
-    app.config['SECRET_KEY'] = config['SECRET_KEY']
+    app.config.from_object("config")
     db.init_app(app)
     migrate = Migrate(app, db)
     return app
@@ -22,7 +21,7 @@ app.register_blueprint(students_blueprint)
 
 @app.route('/', methods=['GET'])
 def index():
-    limit = request.args.get('limit', 5)
+    limit = request.args.get('limit', 10)
     offset = request.args.get('offset', 0)
     students = Student.query.order_by(
         Student.id.desc()).limit(limit).offset(offset).all()

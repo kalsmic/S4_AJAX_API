@@ -1,12 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask import Flask
-from config import get_config
 
 db = SQLAlchemy()
-config = dict()
-config = get_config()
-migrate = Migrate()
 
 
 class FyyurSession():
