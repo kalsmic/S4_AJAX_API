@@ -1,4 +1,4 @@
-# S3_AJAX_API
+# S4_AJAX_API
 
 ## Sample endpoint usage
 
